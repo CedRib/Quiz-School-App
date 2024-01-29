@@ -1,0 +1,91 @@
+<div>
+    <label>Nom :</label>
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input [readonly]="!editable" matInput [formControl]="ctlName">
+        <mat-error class="field-error" *ngIf="ctlName.hasError('required')">Required</mat-error>
+        <mat-error class="field-error" *ngIf="ctlName.hasError('minlength')">Minimum length is 3</mat-error>
+        <mat-error class="field-error" *ngIf="ctlName.hasError('nameUsed')">Name already in use</mat-error>
+    </mat-form-field>
+</div>
+
+<div>
+    <label>Description :</label>
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput [readonly]="!editable" [formControl]="ctlDescription"></textarea>
+    </mat-form-field>
+</div>
+
+<div>
+    <label>Type de Quiz :</label>
+    <mat-radio-group [formControl]="ctlIsTest">
+        <mat-radio-button [value]="false">Training</mat-radio-button>
+        <mat-radio-button [value]="true">Test</mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div>
+    <mat-form-field>
+        <mat-select [formControl]="ctlDatabase">
+            <mat-option *ngFor="let db of databases" [value]="db.id">
+                {{ db.name }}
+            </mat-option>
+        </mat-select>
+        <mat-error class="field-error" *ngIf="ctlDatabase.hasError('required')">Required</mat-error>
+    </mat-form-field>
+</div>
+
+<div *ngIf="ctlIsTest.value">
+    <mat-form-field>
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="datepicker" [formControl]="ctlStartDate">
+        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker></mat-datepicker>
+    </mat-form-field>
+</div>
+<div *ngIf="ctlIsTest.value">
+    <mat-form-field>
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="datepicker" [formControl]="ctlEndDate">
+        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker></mat-datepicker>
+    </mat-form-field>
+</div>
+
+<div>
+    <mat-slide-toggle [formControl]="ctlIsPublished" [checked]="ctlIsPublished.value">Publié</mat-slide-toggle>
+</div>
+<div>
+    <button mat-icon-button (click)="deleteQuiz()" ><mat-icon>delete</mat-icon></button>
+    <button mat-icon-button (click)="save()" [disabled]="!editable"><mat-icon>save</mat-icon></button>
+</div>
+
+<mat-error class="field-error" *ngIf="ctlQuestions.hasError('required')">At least one question required and at least one solution for each question</mat-error>
+<mat-expansion-panel  *ngFor="let q of ctlQuestions.value;">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{ q.questionOrder + ". " + q.body }}
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <button mat-icon-button (click)="moveUpQuestionOrder(q)" *ngIf="editable"><mat-icon>keyboard_arrow_up</mat-icon></button>
+    <button mat-icon-button (click)="moveDownQuestionOrder(q)" *ngIf="editable"><mat-icon>keyboard_arrow_down</mat-icon></button>
+    <button mat-icon-button (click)="deleteQuestion(q.id!)" *ngIf="editable"><mat-icon>delete</mat-icon></button><br>
+    <p>Intitulé</p>
+    <mat-form-field style="width: 1000px">
+        <textarea [readonly]="!editable" matInput [(ngModel)]="q.body">{{q.body}}</textarea>
+    </mat-form-field>
+    <br>
+    <p>Solution</p>
+    <div *ngFor="let solution of q.solutions">
+
+        <div>
+            <button mat-icon-button *ngIf="editable" (click)="moveUpSolutionOrder(q, solution)"><mat-icon>keyboard_arrow_up</mat-icon></button>
+            <button mat-icon-button *ngIf="editable" (click)="moveDownSolutionOrder(q, solution)"><mat-icon>keyboard_arrow_down</mat-icon></button>
+        </div>
+        <code-editor [readOnly]="!editable" [(ngModel)]="solution.sql" [database]="databaseName"></code-editor>
+        <button mat-icon-button (click)="deleteSolution(q.id!, solution.id!)" *ngIf="editable"><mat-icon>delete</mat-icon></button>
+    </div>
+    <button mat-icon-button *ngIf="editable" (click)="addSolution(q.id!)" class="add_btn"><mat-icon>add_box</mat-icon></button>
+</mat-expansion-panel>
+<button mat-icon-button (click)="addQuestion()" *ngIf="editable" class="add_btn"><mat-icon>add_box</mat-icon></button>

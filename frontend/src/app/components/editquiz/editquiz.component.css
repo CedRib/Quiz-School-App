@@ -1,0 +1,10 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+.add_btn {
+  margin-left: 1200px;
+}
+

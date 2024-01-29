@@ -1,0 +1,40 @@
+<div>
+    <button mat-icon-button (click)="previousQuestion()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    
+    <button mat-icon-button (click)="nextQuestion()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+</div>
+
+<h2>{{ quiz?.name }} - Exercice {{ currentQuestion?.questionOrder }}</h2>
+
+<div class="closedBtn">
+    <button mat-icon-button (click)="finishAttempt()" [disabled]="!saveBtn"><mat-icon>clear</mat-icon></button>
+</div>
+
+<h1>{{currentQuestion?.body}}</h1>
+<div>
+    <p>Votre requête : </p>
+</div>
+<code-editor [database]="database" [(ngModel)]="studentAnswer" [readOnly]="editable"></code-editor>
+<div>
+    <div class="nav-button">
+        <button mat-elevated-button (click)="send()" *ngIf=!editable [disabled]="disableSend">Envoyer</button>&nbsp;
+        <button mat-elevated-button (click)="erase()" *ngIf=!editable>Effacer</button>&nbsp;
+        <button mat-elevated-button (click)="displaySolutions()" *ngIf=displaySolutionBtn>{{solutionBtnLabel()}}</button>&nbsp;
+    </div>
+</div>
+<div>
+    <p>{{timeStamp | date:'dd/MM/yyyy hh:mm:ss' }}</p>
+</div>
+
+<div *ngIf="resultVisible">
+    <result [result]="result"></result>
+</div>
+
+<br><br>
+<div *ngIf="solutionsVisible">
+    <solution [currentQuestion]="currentQuestion"></solution>
+</div>

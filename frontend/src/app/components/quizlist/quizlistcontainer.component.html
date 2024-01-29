@@ -1,0 +1,18 @@
+<div>
+	<mat-form-field>
+		<mat-label>Filter</mat-label>
+		<input matInput [(ngModel)]="filter" appSetFocus>
+	</mat-form-field>
+</div>
+
+<div *ngIf="isTeacher">
+    <h1>Quiz</h1>
+<app-quizlist [filter]="filter"></app-quizlist>
+</div> 
+<div *ngIf="!isTeacher">
+    <h1>Training quiz</h1>
+    <app-quizlist [filter]="filter" [quiztype]="training" ></app-quizlist>
+    <br>
+    <h1>Test quiz</h1>
+    <app-quizlist [filter]="filter" [quiztype]="test"></app-quizlist>
+</div>

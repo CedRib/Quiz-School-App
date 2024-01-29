@@ -1,0 +1,36 @@
+<div *ngIf="result !== null">
+    <div class="trueQuery" *ngIf="displayCorrect">
+        <p>{{ trueQueryOne }}</p>
+        <p>{{ trueQueryTwo }}</p>
+    </div>
+    <div class="errorQuery" *ngIf="displayError">
+        <p>{{ falseQuery }}</p>
+        <ul>
+            <li *ngFor="let error of result.errorList || []">{{ error }}</li>
+        </ul>
+    </div>
+    <div class="errorQuery" *ngIf="displayWrongQuery">
+        <p>{{ wrongQueryTitle }}</p>
+        <p>{{ result.wrongQuery }}</p>
+    </div>
+    <div *ngIf="!displayWrongQuery">
+        <p>{{result.row}} line(s)</p>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th *ngFor="let column of result.columnsLabel || []">{{ column }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let line of result.data || []">
+                    <td *ngFor="let col of line">{{ col }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+  
+  

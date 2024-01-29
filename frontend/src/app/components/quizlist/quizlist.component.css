@@ -1,0 +1,17 @@
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+th.mat-column-actions {
+    width: 130px;
+}
+
+.add_btn {
+    margin-left: 1250px;
+  }
+  
